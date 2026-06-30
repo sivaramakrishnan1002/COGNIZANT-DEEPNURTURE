@@ -1,47 +1,31 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
+from . import db
+from .models import Course
 
 courses_bp = Blueprint("courses", __name__)
-
-courses = [
-    {
-        "id": 1,
-        "name": "Python Programming",
-        "code": "CS101",
-        "credits": 4,
-        "department": "Computer Science"
-    },
-    {
-        "id": 2,
-        "name": "Database Systems",
-        "code": "CS102",
-        "credits": 3,
-        "department": "Computer Science"
-    }
-]
 
 
 @courses_bp.route("/")
 def home():
-    return jsonify({
-        "message": "Course Management API Running"
-    })
+    return jsonify({"message": "Flask Course Management API"})
 
 
 @courses_bp.route("/api/courses", methods=["GET"])
 def get_courses():
 
-    return jsonify(courses)
+    courses = Course.query.all()
+
+    return jsonify(
+        [course.to_dict() for course in courses]
+    )
 
 
 @courses_bp.route("/api/courses/<int:id>", methods=["GET"])
 def get_course(id):
 
-    for course in courses:
+    course = Course.query.get_or_404(id)
 
-        if course["id"] == id:
-            return jsonify(course)
-
-    return jsonify({"error": "Course not found"}), 404
+    return jsonify(course.to_dict())
 
 
 @courses_bp.route("/api/courses", methods=["POST"])
@@ -49,31 +33,44 @@ def create_course():
 
     data = request.get_json()
 
-    if not data:
-        return jsonify({"error": "Invalid JSON"}), 400
+    course = Course(
+        name=data["name"],
+        code=data["code"],
+        credits=data["credits"],
+        department_id=data["department_id"]
+    )
 
-    required_fields = [
-        "name",
-        "code",
-        "credits",
-        "department"
-    ]
+    db.session.add(course)
+    db.session.commit()
 
-    for field in required_fields:
+    return jsonify(course.to_dict()), 201
 
-        if field not in data:
-            return jsonify(
-                {"error": f"{field} is required"}
-            ), 400
 
-    new_course = {
-        "id": len(courses) + 1,
-        "name": data["name"],
-        "code": data["code"],
-        "credits": data["credits"],
-        "department": data["department"]
-    }
+@courses_bp.route("/api/courses/<int:id>", methods=["PUT"])
+def update_course(id):
 
-    courses.append(new_course)
+    course = Course.query.get_or_404(id)
 
-    return jsonify(new_course), 201
+    data = request.get_json()
+
+    course.name = data["name"]
+    course.code = data["code"]
+    course.credits = data["credits"]
+    course.department_id = data["department_id"]
+
+    db.session.commit()
+
+    return jsonify(course.to_dict())
+
+
+@courses_bp.route("/api/courses/<int:id>", methods=["DELETE"])
+def delete_course(id):
+
+    course = Course.query.get_or_404(id)
+
+    db.session.delete(course)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Course deleted successfully"
+    })
