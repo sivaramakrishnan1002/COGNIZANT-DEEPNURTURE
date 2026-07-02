@@ -3,7 +3,6 @@ from typing import Optional
 
 
 class CourseCreate(BaseModel):
-
     name: str
     code: str
     credits: int
@@ -11,7 +10,6 @@ class CourseCreate(BaseModel):
 
 
 class CourseUpdate(BaseModel):
-
     name: Optional[str] = None
     code: Optional[str] = None
     credits: Optional[int] = None
@@ -19,7 +17,6 @@ class CourseUpdate(BaseModel):
 
 
 class CourseResponse(BaseModel):
-
     id: int
     name: str
     code: str

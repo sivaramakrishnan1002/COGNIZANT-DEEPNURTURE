@@ -1,15 +1,30 @@
 from typing import List
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import (
+    FastAPI,
+    Depends,
+    HTTPException,
+    BackgroundTasks,
+    status
+)
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import Base, engine, get_db
-from schemas import CourseCreate, CourseResponse
-from crud import get_courses, get_course, create_course
+
+from schemas import (
+    CourseCreate,
+    CourseUpdate,
+    CourseResponse
+)
+
+import crud
+
 
 app = FastAPI(
     title="Course Management API",
-    version="1.0"
+    description="FastAPI CRUD API",
+    version="1.0.0"
 )
 
 
@@ -22,33 +37,31 @@ async def startup():
 
 @app.get("/")
 async def home():
-
-    return {
-        "message": "API Running"
-    }
+    return {"message": "API Running"}
 
 
 @app.get(
     "/api/courses",
-    response_model=List[CourseResponse]
+    response_model=List[CourseResponse],
+    tags=["Courses"]
 )
-async def all_courses(
+async def get_all_courses(
     db: AsyncSession = Depends(get_db)
 ):
-
-    return await get_courses(db)
+    return await crud.get_courses(db)
 
 
 @app.get(
     "/api/courses/{course_id}",
-    response_model=CourseResponse
+    response_model=CourseResponse,
+    tags=["Courses"]
 )
-async def single_course(
+async def get_single_course(
     course_id: int,
     db: AsyncSession = Depends(get_db)
 ):
 
-    course = await get_course(db, course_id)
+    course = await crud.get_course(db, course_id)
 
     if not course:
         raise HTTPException(
@@ -61,23 +74,80 @@ async def single_course(
 
 @app.post(
     "/api/courses",
-    response_model=CourseResponse
+    response_model=CourseResponse,
+    status_code=status.HTTP_201_CREATED,
+    tags=["Courses"]
 )
-async def add_course(
+async def create_course(
     course: CourseCreate,
     db: AsyncSession = Depends(get_db)
 ):
 
-    return await create_course(db, course)
+    return await crud.create_course(db, course)
 
 
-@app.get("/api/courses/search/")
-async def search_courses(
-    skip: int = 0,
-    limit: int = 2
+@app.put(
+    "/api/courses/{course_id}",
+    response_model=CourseResponse,
+    tags=["Courses"]
+)
+async def update_course(
+    course_id: int,
+    course: CourseUpdate,
+    db: AsyncSession = Depends(get_db)
 ):
 
+    updated = await crud.update_course(
+        db,
+        course_id,
+        course
+    )
+
+    if not updated:
+        raise HTTPException(
+            status_code=404,
+            detail="Course not found"
+        )
+
+    return updated
+
+
+@app.delete(
+    "/api/courses/{course_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    tags=["Courses"]
+)
+async def delete_course(
+    course_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+
+    deleted = await crud.delete_course(
+        db,
+        course_id
+    )
+
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Course not found"
+        )
+
+
+def send_email():
+    print("Enrollment confirmation email sent!")
+
+
+@app.post(
+    "/api/enrollments",
+    tags=["Enrollments"]
+)
+async def create_enrollment(
+    background_tasks: BackgroundTasks
+):
+
+    background_tasks.add_task(send_email)
+
     return {
-        "skip": skip,
-        "limit": limit
+        "message": "Enrollment Created"
     }
