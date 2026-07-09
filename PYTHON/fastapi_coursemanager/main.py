@@ -4,136 +4,227 @@ from fastapi import (
     FastAPI,
     Depends,
     HTTPException,
-    BackgroundTasks,
-    Response,
-    Request,
     status
 )
 
-from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+
+from fastapi.security import OAuth2PasswordRequestForm
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database import Base, engine, get_db
-from schemas import CourseCreate, CourseUpdate, CourseResponse
+from database import (
+    Base,
+    engine,
+    get_db
+)
+
 import crud
+import auth
+
+from schemas import (
+    UserCreate,
+    Token,
+    CourseCreate,
+    CourseUpdate,
+    CourseResponse
+)
 
 
 app = FastAPI(
     title="Course Management API",
-    description="REST API Best Practices",
-    version="1.0.0",
-    contact={
-        "name": "Course Manager Team",
-        "email": "admin@example.com"
-    }
+    description="FastAPI Authentication using JWT",
+    version="1.0"
 )
+app.add_middleware(
+    CORSMiddleware,
 
+    allow_origins=["*"],
+
+    allow_credentials=True,
+
+    allow_methods=["*"],
+
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def startup():
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-
 @app.get("/")
 async def home():
-    return {"message": "API Running"}
+
+    return {
+        "message": "FastAPI Authentication Running"
+    }
 
 
-# -----------------------------
-# GET ALL COURSES (Pagination)
-# -----------------------------
-@app.get(
-    "/api/v1/courses",
-    response_model=List[CourseResponse],
-    tags=["Courses"]
+@app.post(
+    "/api/v1/auth/register",
+    status_code=201
 )
-async def get_courses(
-    page: int = 1,
-    page_size: int = 2,
+async def register(
+
+    user: UserCreate,
+
     db: AsyncSession = Depends(get_db)
+
 ):
-    return await crud.paginated_courses(
+
+    existing = await crud.get_user_by_email(
         db,
-        page,
-        page_size
+        user.email
     )
 
+    if existing:
 
-# -----------------------------
-# SEARCH
-# -----------------------------
-@app.get(
-    "/api/v1/courses/search",
-    response_model=List[CourseResponse],
-    tags=["Courses"]
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered"
+        )
+
+    await crud.create_user(
+        db,
+        user
+    )
+
+    return {
+        "message": "User Registered Successfully"
+    }
+@app.post(
+    "/api/v1/auth/login",
+    response_model=Token
 )
-async def search_courses(
-    q: str,
+async def login(
+
+    form_data: OAuth2PasswordRequestForm = Depends(),
+
     db: AsyncSession = Depends(get_db)
+
 ):
-    return await crud.search_courses(db, q)
 
+    user = await crud.get_user_by_email(
+        db,
+        form_data.username
+    )
 
-# -----------------------------
-# GET SINGLE COURSE
-# -----------------------------
+    if not user:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password"
+        )
+
+    if not auth.verify_password(
+        form_data.password,
+        user.hashed_password
+    ):
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password"
+        )
+
+    access_token = auth.create_access_token(
+        {
+            "sub": user.email
+        }
+    )
+
+    return {
+
+        "access_token": access_token,
+
+        "token_type": "bearer"
+
+    }
+@app.get("/api/v1/profile")
+async def profile(
+
+    current_user=Depends(
+        auth.get_current_user
+    )
+
+):
+
+    return {
+
+        "username": current_user.username,
+
+        "email": current_user.email
+
+    }
+@app.get(
+    "/api/v1/courses",
+    response_model=List[CourseResponse]
+)
+async def get_courses(
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(auth.get_current_user)
+):
+
+    return await crud.get_courses(db)
 @app.get(
     "/api/v1/courses/{course_id}",
-    response_model=CourseResponse,
-    tags=["Courses"]
+    response_model=CourseResponse
 )
 async def get_course(
     course_id: int,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(auth.get_current_user)
 ):
-    course = await crud.get_course(db, course_id)
+
+    course = await crud.get_course(
+        db,
+        course_id
+    )
 
     if not course:
+
         raise HTTPException(
             status_code=404,
             detail="Course not found"
         )
 
     return course
-
-
-# -----------------------------
-# CREATE COURSE
-# -----------------------------
 @app.post(
     "/api/v1/courses",
     response_model=CourseResponse,
-    status_code=status.HTTP_201_CREATED,
-    tags=["Courses"]
+    status_code=status.HTTP_201_CREATED
 )
 async def create_course(
+
     course: CourseCreate,
-    response: Response,
-    db: AsyncSession = Depends(get_db)
+
+    db: AsyncSession = Depends(get_db),
+
+    current_user=Depends(auth.get_current_user)
+
 ):
-    new_course = await crud.create_course(db, course)
 
-    response.headers["Location"] = (
-        f"/api/v1/courses/{new_course.id}"
+    return await crud.create_course(
+        db,
+        course
     )
-
-    return new_course
-
-
-# -----------------------------
-# UPDATE (PUT)
-# -----------------------------
 @app.put(
     "/api/v1/courses/{course_id}",
-    response_model=CourseResponse,
-    tags=["Courses"]
+    response_model=CourseResponse
 )
 async def update_course(
+
     course_id: int,
+
     course: CourseUpdate,
-    db: AsyncSession = Depends(get_db)
+
+    db: AsyncSession = Depends(get_db),
+
+    current_user=Depends(auth.get_current_user)
+
 ):
+
     updated = await crud.update_course(
         db,
         course_id,
@@ -141,104 +232,53 @@ async def update_course(
     )
 
     if not updated:
+
         raise HTTPException(
             status_code=404,
             detail="Course not found"
         )
 
     return updated
-
-
-# -----------------------------
-# PATCH
-# -----------------------------
-@app.patch(
-    "/api/v1/courses/{course_id}",
-    response_model=CourseResponse,
-    tags=["Courses"]
-)
-async def patch_course(
-    course_id: int,
-    course: CourseUpdate,
-    db: AsyncSession = Depends(get_db)
-):
-    updated = await crud.update_course(
-        db,
-        course_id,
-        course
-    )
-
-    if not updated:
-        raise HTTPException(
-            status_code=404,
-            detail="Course not found"
-        )
-
-    return updated
-
-
-# -----------------------------
-# DELETE
-# -----------------------------
 @app.delete(
     "/api/v1/courses/{course_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-    tags=["Courses"]
+    status_code=status.HTTP_204_NO_CONTENT
 )
 async def delete_course(
+
     course_id: int,
-    db: AsyncSession = Depends(get_db)
+
+    db: AsyncSession = Depends(get_db),
+
+    current_user=Depends(auth.get_current_user)
+
 ):
+
     deleted = await crud.delete_course(
         db,
         course_id
     )
 
     if not deleted:
+
         raise HTTPException(
             status_code=404,
             detail="Course not found"
         )
 
     return
+from fastapi.responses import JSONResponse
+from fastapi import Request
 
 
-# -----------------------------
-# BACKGROUND TASK
-# -----------------------------
-def send_email():
-    print("Enrollment confirmation email sent!")
-
-
-@app.post(
-    "/api/enrollments",
-    status_code=status.HTTP_201_CREATED,
-    tags=["Enrollments"]
-)
-async def create_enrollment(
-    background_tasks: BackgroundTasks
-):
-    background_tasks.add_task(send_email)
-
-    return {
-        "message": "Enrollment Created"
-    }
-
-
-# -----------------------------
-# STANDARD ERROR FORMAT
-# -----------------------------
 @app.exception_handler(HTTPException)
-async def http_exception_handler(
+async def custom_http_exception_handler(
     request: Request,
     exc: HTTPException
 ):
+
     return JSONResponse(
         status_code=exc.status_code,
         content={
-            "error": {
-                "code": exc.status_code,
-                "message": exc.detail
-            }
+            "error": exc.detail
         }
     )

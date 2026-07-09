@@ -1,6 +1,30 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 
+
+# -------------------------
+# USER SCHEMAS
+# -------------------------
+
+class UserCreate(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+# -------------------------
+# COURSE SCHEMAS
+# -------------------------
 
 class CourseCreate(BaseModel):
     name: str
@@ -25,7 +49,3 @@ class CourseResponse(BaseModel):
 
     class Config:
         from_attributes = True
-
-
-class ErrorResponse(BaseModel):
-    detail: str
