@@ -1,0 +1,2 @@
+import {createRouter,createWebHistory} from 'vue-router';import Home from './views/Home.vue';import Courses from './views/Courses.vue';import Detail from './views/Detail.vue';import Profile from './views/Profile.vue';
+const router=createRouter({history:createWebHistory(),routes:[{path:'/',component:Home},{path:'/courses',component:Courses},{path:'/courses/:id',component:Detail},{path:'/profile',component:Profile}]});router.beforeEach(to=>console.info(`Navigating to: ${to.path}`));export default router;

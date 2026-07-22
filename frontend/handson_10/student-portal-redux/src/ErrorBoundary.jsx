@@ -1,0 +1,1 @@
+import React from 'react';export default class ErrorBoundary extends React.Component{state={error:false};static getDerivedStateFromError(){return{error:true}}componentDidCatch(error){console.error('Global application error',error)}render(){return this.state.error?<main><h1>Something went wrong</h1><p>Please refresh the page and try again.</p></main>:this.props.children}}

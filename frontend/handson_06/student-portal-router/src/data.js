@@ -1,0 +1,1 @@
+export const courses = [{id:1,name:'Data Structures',code:'CS101',credits:4,grade:'A'},{id:2,name:'Web Development',code:'CS205',credits:3,grade:'A-'},{id:3,name:'Database Systems',code:'CS220',credits:4,grade:'B+'},{id:4,name:'Cloud Computing',code:'CS310',credits:3,grade:'A'},{id:5,name:'Python Programming',code:'CS115',credits:4,grade:'A-'}];

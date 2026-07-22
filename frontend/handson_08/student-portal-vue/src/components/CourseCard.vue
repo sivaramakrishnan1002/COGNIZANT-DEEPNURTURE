@@ -1,0 +1,1 @@
+<script setup>defineProps({course:Object})</script><template><RouterLink class="card" :to="`/courses/${course.id}`"><h2>{{course.name}}</h2><p>{{course.code}} · {{course.credits}} credits · {{course.grade}}</p></RouterLink></template>
