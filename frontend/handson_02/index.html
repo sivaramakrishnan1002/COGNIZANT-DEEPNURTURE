@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Hands-On 2 (Responsive Flex & Grid)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Task 1: Flexbox Navigation & Header Layout -->
+    <header>
+        <div class="site-logo">
+            <h2>Student Portal</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#grades">Grades</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Task 1: Flexbox Hero Section -->
+        <section id="hero">
+            <h1>Welcome to the Student Portal</h1>
+            <p>Your one-stop destination for course management, academic tracking, and learning resources.</p>
+            <button>Explore Courses</button>
+        </section>
+
+        <!-- Task 1: Student Stats Bar -->
+        <section id="stats-bar">
+            <div class="stat-item">
+                <span class="stat-value">3</span>
+                <span class="stat-label">Courses Enrolled</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">3.8</span>
+                <span class="stat-label">GPA</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">6</span>
+                <span class="stat-label">Semester</span>
+            </div>
+        </section>
+
+        <!-- Task 2: CSS Grid Course Cards -->
+        <section id="courses">
+            <h2>Available Courses</h2>
+            <div class="course-grid">
+                <article class="course-card">
+                    <h3>CS101 — Data Structures</h3>
+                    <p>Learn core data structures including arrays, linked lists, trees, and graphs for efficient problem solving.</p>
+                    <span class="credits">4 Credits</span>
+                </article>
+
+                <article class="course-card">
+                    <h3>CS102 — Web Development Fundamentals</h3>
+                    <p>Master HTML5, CSS3, modern JavaScript, and responsive design patterns for web apps.</p>
+                    <span class="credits">4 Credits</span>
+                </article>
+
+                <article class="course-card">
+                    <h3>CS103 — Database Systems</h3>
+                    <p>Understand relational database management systems, SQL queries, indexing, and data normalization.</p>
+                    <span class="credits">3 Credits</span>
+                </article>
+
+                <article class="course-card">
+                    <h3>CS104 — Software Engineering</h3>
+                    <p>Agile methodologies, system design principles, software architecture patterns, and unit testing.</p>
+                    <span class="credits">4 Credits</span>
+                </article>
+
+                <article class="course-card">
+                    <h3>CS105 — Artificial Intelligence</h3>
+                    <p>Introduction to machine learning algorithms, state search algorithms, and neural network basics.</p>
+                    <span class="credits">4 Credits</span>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Student Portal. Digital Nurture 5.0 - All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

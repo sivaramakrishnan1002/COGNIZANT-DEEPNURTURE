@@ -1,0 +1,145 @@
+/* Step 8: Apply CSS reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Step 9: Style <body> */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7f6;
+    color: #333333;
+    line-height: 1.6;
+}
+
+/* Step 10: Style <header> */
+header {
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.site-logo h2 {
+    font-size: 1.5rem;
+    color: #38bdf8;
+}
+
+/* Step 11: Style nav links */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+nav ul li a {
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+nav ul li a:hover {
+    color: #38bdf8;
+}
+
+/* Step 12: Style hero section */
+#hero {
+    background-color: #ffffff;
+    text-align: center;
+    padding: 3rem 1.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+#hero h1 {
+    font-size: 2.2rem;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
+}
+
+#hero p {
+    font-size: 1.1rem;
+    color: #64748b;
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
+}
+
+#hero button {
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#hero button:hover {
+    background-color: #1d4ed8;
+}
+
+/* Step 13: Style #courses & .course-card */
+#courses {
+    max-width: 1100px;
+    margin: 0 auto 3rem auto;
+    padding: 0 1.5rem;
+}
+
+#courses h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+}
+
+.course-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.course-card {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    flex: 1 1 calc(33.333% - 1.5rem);
+    min-width: 260px;
+}
+
+.course-card h3 {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.course-card p {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+}
+
+.course-card .credits {
+    display: inline-block;
+    background-color: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+}
+
+footer {
+    background-color: #1e293b;
+    color: #94a3b8;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: auto;
+}

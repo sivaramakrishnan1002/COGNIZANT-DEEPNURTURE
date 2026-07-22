@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Hands-On 3 (JS ES6+ & DOM)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="site-logo">
+            <h2>Student Portal</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#profile">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <h1>Dynamic Course Management</h1>
+            <p>Interactive DOM selection, ES6 data processing, real-time search, sorting, and event delegation.</p>
+        </section>
+
+        <section id="controls-section">
+            <div class="controls-container">
+                <!-- Step 40: Search input -->
+                <input type="text" id="search-courses" placeholder="Search courses by name...">
+                
+                <!-- Step 42: Sort by Credits button -->
+                <button id="sort-credits-btn">Sort by Credits (Desc)</button>
+            </div>
+
+            <!-- Step 43: Selected course notification div -->
+            <div id="selected-course" class="selected-badge" style="display: none;"></div>
+        </section>
+
+        <section id="courses">
+            <h2>Course Catalog</h2>
+            <!-- Step 35: Empty course grid container -->
+            <div class="course-grid"></div>
+
+            <!-- Step 39: Total credits paragraph -->
+            <p id="total-credits"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Student Portal. Digital Nurture 5.0 - All Rights Reserved.</p>
+    </footer>
+
+    <!-- Script loaded as ES6 module -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>

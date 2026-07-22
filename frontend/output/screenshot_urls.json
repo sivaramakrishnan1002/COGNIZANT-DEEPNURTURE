@@ -1,0 +1,75 @@
+{
+  "baseUrl": "http://localhost:8080",
+  "handsOnModules": [
+    {
+      "module": "HANDS-ON-1",
+      "title": "HTML5 Semantic Structure & CSS3 Foundations",
+      "url": "http://localhost:8080/handson_01/index.html",
+      "screenshots": [
+        {
+          "name": "desktop_overview.png",
+          "path": "output/HANDS-ON-1/desktop_overview.png",
+          "viewport": "1280x900"
+        }
+      ]
+    },
+    {
+      "module": "HANDS-ON-2",
+      "title": "CSS Flexbox, Grid & Responsive Design",
+      "url": "http://localhost:8080/handson_02/index.html",
+      "screenshots": [
+        {
+          "name": "mobile_375px.png",
+          "path": "output/HANDS-ON-2/mobile_375px.png",
+          "viewport": "375x812"
+        },
+        {
+          "name": "tablet_768px.png",
+          "path": "output/HANDS-ON-2/tablet_768px.png",
+          "viewport": "768x1024"
+        },
+        {
+          "name": "desktop_1280px.png",
+          "path": "output/HANDS-ON-2/desktop_1280px.png",
+          "viewport": "1280x900"
+        }
+      ]
+    },
+    {
+      "module": "HANDS-ON-3",
+      "title": "JavaScript ES6+ & DOM Manipulation",
+      "url": "http://localhost:8080/handson_03/index.html",
+      "screenshots": [
+        {
+          "name": "interactive_catalog.png",
+          "path": "output/HANDS-ON-3/interactive_catalog.png",
+          "viewport": "1280x900"
+        }
+      ]
+    },
+    {
+      "module": "HANDS-ON-4",
+      "title": "Async JavaScript, Fetch API & API Integration",
+      "url": "http://localhost:8080/handson_04/index.html",
+      "screenshots": [
+        {
+          "name": "async_api_integration.png",
+          "path": "output/HANDS-ON-4/async_api_integration.png",
+          "viewport": "1280x1000"
+        }
+      ]
+    },
+    {
+      "module": "HANDS-ON-5",
+      "title": "React Fundamentals — Components, Props, State & Hooks",
+      "url": "http://localhost:8080/handson_05/student-portal-react/dist/index.html",
+      "screenshots": [
+        {
+          "name": "react_portal_dist.png",
+          "path": "output/HANDS-ON-5/react_portal_dist.png",
+          "viewport": "1280x1000"
+        }
+      ]
+    }
+  ]
+}

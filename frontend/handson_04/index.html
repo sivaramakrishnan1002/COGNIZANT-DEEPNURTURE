@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Hands-On 4 (Async JS, Fetch & Axios)</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Step 55: Add Axios via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="site-logo">
+            <h2>Student Portal</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#notifications">Notifications</a></li>
+                <li><a href="#axios-demo">Axios API</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <h1>Async API Integration & Error Handling</h1>
+            <p>Promises, Async/Await, Promise.all, Fetch API, Error Recovery, and Axios Interceptors.</p>
+        </section>
+
+        <!-- Section 1: Simulated Async Course Loading -->
+        <section id="courses">
+            <h2>Portal Courses</h2>
+            <!-- Step 52: Loading state indicator -->
+            <div id="course-loader" class="loader-box">
+                <div class="spinner"></div>
+                <p>Loading courses...</p>
+            </div>
+            <div id="course-grid" class="course-grid"></div>
+        </section>
+
+        <!-- Section 2: Notifications Feed with Error Handling -->
+        <section id="notifications">
+            <h2>Student Notifications</h2>
+            
+            <div class="test-actions">
+                <button id="btn-load-posts">Load Notifications (Valid API)</button>
+                <button id="btn-sim-error">Simulate 404 Error (Bad URL)</button>
+            </div>
+
+            <div id="notif-loader" class="loader-box" style="display: none;">
+                <div class="spinner"></div>
+                <p>Fetching notifications from API...</p>
+            </div>
+
+            <div id="notif-error-banner" class="error-banner" style="display: none;">
+                <p id="error-message"></p>
+                <button id="retry-btn">Retry Request</button>
+            </div>
+
+            <div id="notif-cards-container" class="cards-container"></div>
+        </section>
+
+        <!-- Section 3: Axios Integration Demo -->
+        <section id="axios-demo">
+            <h2>Axios API Integration</h2>
+            <div class="test-actions">
+                <button id="btn-axios-user1">Fetch User 1 Posts (Axios Params)</button>
+                <button id="btn-promise-all">Test Promise.all (Users 1 & 2)</button>
+            </div>
+
+            <div id="axios-output" class="console-box">
+                <p class="placeholder-text">Axios and Promise.all output will appear here and in the browser console...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Student Portal. Digital Nurture 5.0 - All Rights Reserved.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
